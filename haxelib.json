@@ -1,0 +1,14 @@
+{
+  "name" : "audio-player",
+  "url" : "https://github.com/notessimo/audio-player",
+  "tags": ["audio", "cross", "openfl"],
+  "license" : "MIT",
+  "description" : "Cross-platform dynamic audio",
+  "version" : "1.0.0",
+  "classPath": "src/",
+  "releasenote" : "Initial Release",
+  "contributors" : ["starburst997"],
+  "dependencies" : {
+    "fs-utils": ""
+  }
+}
