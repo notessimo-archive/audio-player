@@ -17,6 +17,7 @@ class AudioChannel extends NativeChannel {
     }
 
     function get_sampleRate():Float {
+        // TODO: Better way to get on native?
         #if js
         return NativeChannel.ctx == null ? DEFAULT_SAMPLE_RATE : NativeChannel.ctx.sampleRate;
         #else
@@ -52,7 +53,7 @@ class AudioPlayer {
         _generator = generator;
 
         switch( _channel ) {
-            case Some(channel) : channel.generator = _generator.mapFromNullable((f) -> (out) -> f(out, sampleRate));
+            case Some(channel) : channel.generator = _generator.mapOption((f) -> (out) -> f(out, sampleRate));
             case None : 
         }
 
