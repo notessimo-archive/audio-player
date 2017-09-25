@@ -5,7 +5,7 @@ Mostly just a wrapper over the NativeChannel class from HEAPS.
 I take no credit for this, but could be usefull for other project that need minimal cross-platform dynamic audio generation without importing a huge lib.
 
 Sample:
-```
+```haxe
 var n = 0;
 var volume = 0.3;
 var frequency = 425;
