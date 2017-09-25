@@ -7,10 +7,10 @@ using OptionTools;
 
 class AudioChannel extends NativeChannel {
 
-    public static inline var DEFAULT_SAMPLE_RATE:Float = 44100.0;
+    public static inline var DEFAULT_SAMPLE_RATE : Float = 44100.0;
 
-    public var sampleRate(get, null):Float;
-    public var generator:Option<Float32Array->Void> = None;
+    public var sampleRate(get, null) : Float;
+    public var generator : Option<Float32Array->Void> = None;
 
     public function new( bufferSamples : Int ) {
         super(bufferSamples);
@@ -27,32 +27,62 @@ class AudioChannel extends NativeChannel {
     override function onSample( out : Float32Array ) {
         switch( generator ) {
             case Some( generator ) : generator(out);
-            case None : for (i in 0...out.length) out.set(i, 0.0);
+            case None : for( i in 0...out.length ) out.set(i, 0.0);
         }
 	}
 }
 
 class AudioPlayer {
 
-    public var sampleRate:Float = AudioChannel.DEFAULT_SAMPLE_RATE;
+    public var sampleRate : Float = AudioChannel.DEFAULT_SAMPLE_RATE;
 
-    var _channel:AudioChannel;
-    var _generator:Option<Float32Array->Float->Void> = None;
+    var _bufferSamples : Int;
+    var _channel : Option<AudioChannel> = None;
+    var _generator : Float32Array->Float->Void = null;
 
     public static function create( ?bufferSamples : Int = 8192 ) : AudioPlayer {
         return new AudioPlayer(bufferSamples);
     }
 
     public function new( bufferSamples : Int ) {
-        _channel = new AudioChannel(8192);
-        sampleRate = _channel.sampleRate;
-
-        // TODO: If channel dies, re-create it?
+        _bufferSamples = bufferSamples;
     }
 
     public function useGenerator( generator : Float32Array->Float->Void ) {
-        _generator = generator.fromNullable();
-        _channel.generator = generator.mapFromNullable((f) -> (out) -> f(out, sampleRate));
+        _generator = generator;
+
+        switch( _channel ) {
+            case Some(channel) : channel.generator = _generator.mapFromNullable((f) -> (out) -> f(out, sampleRate));
+            case None : 
+        }
+
+        return this;
+    }
+
+    public function stop() {
+        switch( _channel ) {
+            case Some(channel) : channel.stop();
+            case None : 
+        }
+
+        _channel = None;
+
+        return this;
+    }
+
+    public function play() {
+        // Stop previously playing channel
+        stop();
+
+        // Create new channel
+        var channel = new AudioChannel(_bufferSamples);
+        _channel = Some(channel);
+
+        sampleRate = channel.sampleRate;
+        useGenerator(_generator);
+
+        // TODO: If channel dies, re-create it?
+
         return this;
     }
 }
