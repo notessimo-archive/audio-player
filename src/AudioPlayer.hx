@@ -49,7 +49,7 @@ class AudioPlayer {
         _bufferSamples = bufferSamples;
     }
 
-    public function useGenerator( generator : Float32Array->Float->Void ) {
+    public function useGenerator( ?generator : Float32Array->Float->Void = null ) {
         _generator = generator;
 
         switch( _channel ) {
