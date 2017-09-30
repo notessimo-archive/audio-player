@@ -95,7 +95,7 @@ class NativeChannel {
 	var channel : flash.media.SoundChannel;
 	#elseif js
 	static var ctx : js.html.audio.AudioContext;
-	static function getContext() {
+	public static function getContext() {
 		if( ctx == null ) {
 			try {
 				ctx = new js.html.audio.AudioContext();
