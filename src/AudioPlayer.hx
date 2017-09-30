@@ -1,5 +1,3 @@
-package;
-
 import haxe.ds.Option;
 import haxe.io.Float32Array;
 
@@ -19,6 +17,9 @@ class AudioPlayer {
 
     public function new( bufferSamples : Int ) {
         this.bufferSamples = bufferSamples;
+
+        // Get sample rate from AudioChannel
+        sampleRate = AudioChannel.sampleRate;
     }
 
     public function useGenerator( ?generator : Float32Array->Float->Void = null ) {
@@ -51,7 +52,6 @@ class AudioPlayer {
         var channel = new AudioChannel(bufferSamples);
         _channel = Some(channel);
 
-        sampleRate = AudioChannel.sampleRate;
         useGenerator(_generator);
 
         // TODO: If channel dies, re-create it?
