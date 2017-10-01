@@ -1,5 +1,3 @@
-package;
-
 import haxe.ds.Option;
 import haxe.io.Float32Array;
 
